@@ -8,11 +8,14 @@ namespace Nano {
 
 		RpcClientStub::~RpcClientStub()
 		{
+			if (m_connected)
+			{
+				disconnect();
+			}
 		}
 
 		bool RpcClientStub::connect(std::string ip, short port)
 		{
-			std::lock_guard<std::mutex> lock(m_connectedMutex);
 			if (!m_connected)
 			{
 				if (m_rpcClient->connect(ip, port))
@@ -34,7 +37,6 @@ namespace Nano {
 
 		void RpcClientStub::disconnect()
 		{
-			std::lock_guard<std::mutex> lock(m_connectedMutex);
 			m_rpcClient->disconnect();
 			m_connected = false;
 		}
@@ -117,14 +119,13 @@ namespace Nano {
 			}
 		}
 
-
 		CallRecord::Ptr RpcClientStub::getReturnCallRecord(const std::string& id) {
 			return m_rpcClient->getReturnCallRecord(id);
 		}
 
 		CallRecord::Ptr RpcClientStub::rpcReturnCallOnce(std::string ip, short port, std::string id, std::string methodName,
 			std::unordered_map<std::string, Json::Value> params,
-			const ProcedureDoneCallback callback, 
+			const ProcedureDoneCallback callback,
 			int milliseconds_timeout)
 		{
 			Nano::JrpcProto::JsonRpcRequest::Ptr request = JrpcProto::JsonRpcRequestFactory::createReturnCallRequest("2.0", methodName, id, params);
@@ -144,7 +145,7 @@ namespace Nano {
 
 		std::future<CallRecord::Ptr> RpcClientStub::asyncRpcReturnCallOnce(std::string ip, short port, std::string id, std::string methodName,
 			std::unordered_map<std::string, Json::Value> params,
-			const ProcedureDoneCallback callback, 
+			const ProcedureDoneCallback callback,
 			int milliseconds_timeout)
 		{
 			Nano::JrpcProto::JsonRpcRequest::Ptr request = JrpcProto::JsonRpcRequestFactory::createReturnCallRequest("2.0", methodName, id, params);
@@ -175,7 +176,7 @@ namespace Nano {
 			}
 		}
 
-		bool RpcClientStub::rpcNotifyCallOnce(std::string ip, short port, std::string methodName, 
+		bool RpcClientStub::rpcNotifyCallOnce(std::string ip, short port, std::string methodName,
 			std::unordered_map<std::string, Json::Value> params)
 		{
 			Nano::JrpcProto::JsonRpcRequest::Ptr request = JrpcProto::JsonRpcRequestFactory::createNotifyCallRequest("2.0", methodName, params);
@@ -192,7 +193,7 @@ namespace Nano {
 			}
 		}
 
-		std::future<bool> RpcClientStub::asyncRpcNotifyCallOnce(std::string ip, short port, std::string methodName, 
+		std::future<bool> RpcClientStub::asyncRpcNotifyCallOnce(std::string ip, short port, std::string methodName,
 			std::unordered_map<std::string, Json::Value> params)
 		{
 			Nano::JrpcProto::JsonRpcRequest::Ptr request = JrpcProto::JsonRpcRequestFactory::createNotifyCallRequest("2.0", methodName, params);

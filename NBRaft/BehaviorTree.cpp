@@ -6,7 +6,7 @@ namespace Nano {
 		Behavior::Behavior(std::string uid, Behavior::EMetaType type) :
 			m_uid(uid),
 			m_status(EStatus::Invalid),
-			m_metaType(type)	
+			m_metaType(type)
 		{}
 
 		// 是否运行结束
@@ -71,7 +71,7 @@ namespace Nano {
 		void Behavior::addChild(Behavior::Ptr child) {}
 
 		Composite::Composite(std::string uid) :
-			Behavior(uid,Behavior::EMetaType::Composite),
+			Behavior(uid, Behavior::EMetaType::Composite),
 			m_children(std::make_shared<BehaviorPtrDoubleList>())
 		{
 		}
@@ -237,7 +237,7 @@ namespace Nano {
 		}
 
 		Decorator::Decorator(std::string uid) :
-			Behavior(uid,Behavior::EMetaType::Decorator),
+			Behavior(uid, Behavior::EMetaType::Decorator),
 			m_child(nullptr)
 		{
 		}
@@ -274,7 +274,7 @@ namespace Nano {
 		}
 
 		Action::Action(std::string uid) :
-			Behavior(uid,Behavior::EMetaType::Action)
+			Behavior(uid, Behavior::EMetaType::Action)
 		{
 		}
 
@@ -324,10 +324,9 @@ namespace Nano {
 		}
 
 		BehaviorTreeBuilder::BehaviorTreeBuilder() :
-			m_tree(std::make_shared<BehaviorTree>()), 
+			m_tree(std::make_shared<BehaviorTree>()),
 			m_nodeStack()
 		{
-
 		}
 
 		void BehaviorTreeBuilder::addBehavior(Behavior::Ptr behavior)

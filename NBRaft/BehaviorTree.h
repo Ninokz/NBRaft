@@ -22,8 +22,8 @@ namespace Nano {
 			enum class EMetaType {
 				Composite = 0b00,		// 组合节点 (2-bit: 00)
 				Decorator = 0b01,		// 修饰节点 (2-bit: 01)
-				Action =	0b10		// 动作节点 (2-bit: 10)
-										// 预留: 0b11 可以用于未来扩展
+				Action = 0b10		// 动作节点 (2-bit: 10)
+				// 预留: 0b11 可以用于未来扩展
 			};
 			typedef std::shared_ptr<Behavior> Ptr;
 		public:

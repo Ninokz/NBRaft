@@ -4,7 +4,6 @@ namespace Nano {
 	namespace Rpc {
 		RpcServer::RpcServer(short port) : Communication::BaseServer(port), m_rpcService(std::make_unique<RpcService>())
 		{
-
 		}
 
 		RpcServer::~RpcServer()

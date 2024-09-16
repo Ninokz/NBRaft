@@ -34,7 +34,6 @@ namespace Nano {
 		private:
 			RpcClient::Ptr m_rpcClient;
 			bool m_connected;
-			std::mutex m_connectedMutex;
 		};
 	}
 }
