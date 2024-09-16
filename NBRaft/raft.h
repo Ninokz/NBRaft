@@ -23,6 +23,9 @@ namespace Nano {
 		{
 			int term = -1;				// 当前任期号，以便候选人去更新自己的任期号
 			bool voteGranted = false;	// 候选人赢得了此张选票时为真
+			typedef std::function<void(int, const RequestVoteArgs&, const RequestVoteReply&)> RequestVoteReplyCallback;		// 选举请求回复回调
 		};
+
+		
 	}
 }
