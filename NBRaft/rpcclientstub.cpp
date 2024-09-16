@@ -12,20 +12,29 @@ namespace Nano {
 
 		bool RpcClientStub::connect(std::string ip, short port)
 		{
-			if (m_rpcClient->connect(ip, port))
+			std::lock_guard<std::mutex> lock(m_connectedMutex);
+			if (!m_connected)
 			{
-				m_connected = true;
-				return true;
+				if (m_rpcClient->connect(ip, port))
+				{
+					m_connected = true;
+					return true;
+				}
+				else
+				{
+					m_connected = false;
+					return false;
+				}
 			}
 			else
 			{
-				m_connected = false;
 				return false;
 			}
 		}
 
 		void RpcClientStub::disconnect()
 		{
+			std::lock_guard<std::mutex> lock(m_connectedMutex);
 			m_rpcClient->disconnect();
 			m_connected = false;
 		}
