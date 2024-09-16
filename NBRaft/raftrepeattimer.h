@@ -15,21 +15,21 @@ namespace Nano {
         public:
             template<typename F>
             RepeatingTimer(int interval_seconds, F&& func)
-                : interval_(boost::asio::chrono::seconds(interval_seconds)),
-                callback_(std::forward<F>(func)),
-                io_context_(),
-                work_guard_(boost::asio::make_work_guard(io_context_)),
-                timer_(io_context_),
-                running_(false) {}
+                : m_interval(boost::asio::chrono::seconds(interval_seconds)),
+                m_callback(std::forward<F>(func)),
+                m_ioc(),
+                m_work_guard(boost::asio::make_work_guard(m_ioc)),
+                m_timer(m_ioc),
+                m_running(false) {}
 
             RepeatingTimer(RepeatingTimer&& other) noexcept
-                : interval_(other.interval_),
-                callback_(std::move(other.callback_)),
-                io_context_(),
-                work_guard_(boost::asio::make_work_guard(io_context_)),
-                timer_(io_context_),
-                running_(other.running_.load()) {
-                if (running_) {
+                : m_interval(other.m_interval),
+                m_callback(std::move(other.m_callback)),
+                m_ioc(),
+                m_work_guard(boost::asio::make_work_guard(m_ioc)),
+                m_timer(m_ioc),
+                m_running(other.m_running.load()) {
+                if (m_running) {
                     start();
                 }
             }
@@ -37,10 +37,10 @@ namespace Nano {
             RepeatingTimer& operator=(RepeatingTimer&& other) noexcept {
                 if (this != &other) {
                     stop();
-                    interval_ = other.interval_;
-                    callback_ = std::move(other.callback_);
-                    running_ = other.running_.load();
-                    if (running_) {
+                    m_interval = other.m_interval;
+                    m_callback = std::move(other.m_callback);
+                    m_running = other.m_running.load();
+                    if (m_running) {
                         start();
                     }
                 }
@@ -48,28 +48,28 @@ namespace Nano {
             }
 
             void start() {
-                if (running_.exchange(true)) {
+                if (m_running.exchange(true)) {
                     return;
                 }
 
-                timer_thread_ = std::thread([this]() {
-                    io_context_.run();
+                m_timer_thread = std::thread([this]() {
+                    m_ioc.run();
                     });
 
-                timer_.expires_after(interval_);
-                timer_.async_wait([this](const boost::system::error_code& ec) {
+                m_timer.expires_after(m_interval);
+                m_timer.async_wait([this](const boost::system::error_code& ec) {
                     this->handle_timer(ec);
                     });
             }
 
             void stop() {
-                if (!running_.exchange(false)) {
+                if (!m_running.exchange(false)) {
                     return;
                 }
 
-                io_context_.stop();
-                if (timer_thread_.joinable()) {
-                    timer_thread_.join();
+                m_ioc.stop();
+                if (m_timer_thread.joinable()) {
+                    m_timer_thread.join();
                 }
             }
 
@@ -79,25 +79,24 @@ namespace Nano {
 
         private:
             void handle_timer(const boost::system::error_code& ec) {
-                if (!ec && running_) {
-                    callback_();
-                    timer_.expires_after(interval_);
-                    timer_.async_wait([this](const boost::system::error_code& ec) {
+                if (!ec && m_running) {
+                    m_callback();
+                    m_timer.expires_after(m_interval);
+                    m_timer.async_wait([this](const boost::system::error_code& ec) {
                         this->handle_timer(ec);
                         });
                 }
             }
 
-            boost::asio::chrono::seconds interval_;
-            Func callback_;
-            boost::asio::io_context io_context_;
-            boost::asio::executor_work_guard<boost::asio::io_context::executor_type> work_guard_;
-            boost::asio::steady_timer timer_;
-            std::thread timer_thread_;
-            std::atomic<bool> running_;
+            boost::asio::chrono::seconds m_interval;
+            Func m_callback;
+            boost::asio::io_context m_ioc;
+            boost::asio::executor_work_guard<boost::asio::io_context::executor_type> m_work_guard;
+            boost::asio::steady_timer m_timer;
+            std::thread m_timer_thread;
+            std::atomic<bool> m_running;
         };
 
-        // Helper function to create a RepeatingTimer
         template<typename Func>
         auto make_repeating_timer(int interval_seconds, Func&& func) {
             return RepeatingTimer<std::decay_t<Func>>(interval_seconds, std::forward<Func>(func));
