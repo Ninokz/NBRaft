@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 #include <string>
-
 #include "nocopyable.h"
 #include "rpcclientstub.h"
 
@@ -9,5 +8,6 @@
 
 namespace Nano {
 	namespace Raft {
+
 	}
 }

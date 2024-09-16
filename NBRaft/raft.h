@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <json/json.h>
 
 namespace Nano {
 	namespace Raft {
