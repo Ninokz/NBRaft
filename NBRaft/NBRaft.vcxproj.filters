@@ -126,6 +126,9 @@
     <ClCompile Include="raftpeer.cpp">
       <Filter>源文件\nbraft</Filter>
     </ClCompile>
+    <ClCompile Include="raftrepeattimer.cpp">
+      <Filter>源文件\nbraft</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BehaviorTree.h">
@@ -219,6 +222,9 @@
       <Filter>头文件\nbraft</Filter>
     </ClInclude>
     <ClInclude Include="raftpeer.h">
+      <Filter>头文件\nbraft</Filter>
+    </ClInclude>
+    <ClInclude Include="raftrepeattimer.h">
       <Filter>头文件\nbraft</Filter>
     </ClInclude>
   </ItemGroup>
