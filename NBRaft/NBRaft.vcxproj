@@ -151,7 +151,6 @@
     <ClCompile Include="parrallenThreadPool.cpp" />
     <ClCompile Include="raft.cpp" />
     <ClCompile Include="raftpeer.cpp" />
-    <ClCompile Include="raftrepeattimer.cpp" />
     <ClCompile Include="rpcclient.cpp" />
     <ClCompile Include="rpcclientstub.cpp" />
     <ClCompile Include="rpcserver.cpp" />
