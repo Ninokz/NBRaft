@@ -29,6 +29,7 @@ namespace Nano {
                         callback(response, false, false);
                     else
                         callback(response, false, true);
+					m_rpcClient->removeCallRecord(id);
                 }
                 else
                 {
@@ -55,6 +56,7 @@ namespace Nano {
 						callback(response, false, false);
 					else
 						callback(response, false, true);
+                    m_rpcClient->removeCallRecord(id);
 				}
 				else
 				{
@@ -82,6 +84,7 @@ namespace Nano {
 						callback(response, false, false);
 					else
 						callback(response, false, true);
+                    m_rpcClient->removeCallRecord(id);
                 }
 				else
 				{
@@ -108,6 +111,7 @@ namespace Nano {
 						callback(response, false, false);
 					else
 						callback(response, false, true);
+                    m_rpcClient->removeCallRecord(id);
                 }
 				else
 				{

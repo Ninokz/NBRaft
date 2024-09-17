@@ -64,6 +64,7 @@ namespace Nano {
 							int len = 0;
 							if (Nano::Communication::encode(responseStr, &buffer, &len))
 							{
+								std::cout << "responseStr: " << responseStr << std::endl;
 								sender->send(buffer, len);
 								delete[] buffer;
 								buffer = nullptr;
