@@ -6,11 +6,18 @@ namespace Nano {
 	namespace Raft {
 		enum class ERaftState
 		{
-			Undefined,
-			Follower,
-			Candidate,
-			Leader
+			Undefined,		// 未定义: 未知状态, 一般用于初始化
+			Follower,		// 跟随者: 只是被动处理请求，不会发送任何请求，负责响应来自 leader 和 candidate 的请求
+			Candidate,		// 候选人: 如果 follower 在选举时间结束后，依然没有接收到来自 leader 的请求，他会认为 leader 已经宕机了。
+							// 这时候当前的集群中需要有一个新的 leader，所以它会变成 candidate 并发起一次选举。如果在选举中，获得大多数选票则会成为 leader
+			Leader			// 领导者: 负责处理客户端请求，如果客户端请求的是写操作，那么 leader 会将这个请求追加到自己的日志中，并向其他节点发送 AppendEntries RPC 请求
+							// 如果客户端请求的是读操作，那么 leader 会直接返回自己的状态
 		};
+
+		//
+		// Request Vote RPC (请求选票): 由 candidate 发起，用来选举时为自己拉票
+		// Append Entries RPC(添加日志): 由 leader 发起，作为一种心跳检测机制和用于复制日志给其他节点。
+		//
 
 		struct RequestVoteArgs
 		{
