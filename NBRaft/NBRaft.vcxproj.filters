@@ -120,7 +120,19 @@
     <ClCompile Include="log.cpp">
       <Filter>源文件\nbrpc\su</Filter>
     </ClCompile>
-    <ClCompile Include="raftService.cpp">
+    <ClCompile Include="raft.cpp">
+      <Filter>源文件\nbraft</Filter>
+    </ClCompile>
+    <ClCompile Include="RaftNode.cpp">
+      <Filter>源文件\nbraft</Filter>
+    </ClCompile>
+    <ClCompile Include="raftRpcClientStub.cpp">
+      <Filter>源文件\nbraft</Filter>
+    </ClCompile>
+    <ClCompile Include="raftRpcServerStub.cpp">
+      <Filter>源文件\nbraft</Filter>
+    </ClCompile>
+    <ClCompile Include="raftservice.cpp">
       <Filter>源文件\nbraft</Filter>
     </ClCompile>
   </ItemGroup>
@@ -221,7 +233,19 @@
     <ClInclude Include="test.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="raftService.h">
+    <ClInclude Include="raft.h">
+      <Filter>头文件\nbraft</Filter>
+    </ClInclude>
+    <ClInclude Include="RaftNode.h">
+      <Filter>头文件\nbraft</Filter>
+    </ClInclude>
+    <ClInclude Include="raftRpcClientStub.h">
+      <Filter>头文件\nbraft</Filter>
+    </ClInclude>
+    <ClInclude Include="raftRpcServerStub.h">
+      <Filter>头文件\nbraft</Filter>
+    </ClInclude>
+    <ClInclude Include="raftservice.h">
       <Filter>头文件\nbraft</Filter>
     </ClInclude>
   </ItemGroup>

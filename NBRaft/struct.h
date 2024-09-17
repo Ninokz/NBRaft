@@ -53,23 +53,6 @@ namespace Nano {
 			int expectTerm = -1;		// 跟随者期望的日志条目任期
 		};
 
-		typedef std::function<void(const RequestVoteReply&)> RequestVoteDoneCallback;		// 当一个节点向其他节点发送投票请求后，收到投票回复时，将调用此回调以处理投票结果
-		typedef std::function<void(const AppendEntriesReply&)> AppendEntriesDoneCallback;	// 当一个节点向其他节点发送日志追加请求后，收到回复时，将调用此回调以处理追加结果
-
-		typedef std::function<void(const RequestVoteArgs&,
-			const RequestVoteDoneCallback&)> DoRequestVoteCallback;							//当节点需要请求其他节点进行投票时，调用此函数。它发送投票请求，可能是异步的，投票结果会在 RequestVoteDoneCallback 回调中处理。
-		typedef std::function<void(const AppendEntriesArgs& args,
-			const AppendEntriesDoneCallback& done)> DoAppendEntriesCallback;				// 当一个节点需要向其他节点发送日志追加请求时，调用此函数。它发送日志追加请求，可能是异步的，追加结果会在 AppendEntriesDoneCallback 回调中处理。
-
-		typedef std::function<void(int, const RequestVoteArgs&,
-			const RequestVoteReply&)> RequestVoteReplyCallback;								// 选举请求回复 回调 (peerId, args, reply)	在 Raft 选举过程中，领导者候选人向其他节点发送投票请求后，当收到其他节点的投票回复时，这个回调会被调用，处理投票结果，并记录哪个节点发起的请求和相应的回复。
-
-		typedef std::function<void(int, const AppendEntriesArgs&,
-			const AppendEntriesReply&)> AppendEntriesReplyCallback;							// 日志追加请求回复 回调 (peerId, args, reply)	在 Raft 算法中，领导者节点向跟随者节点发送日志条目追加请求后，跟随者会返回一个 AppendEntriesReply，这个回调处理来自哪个跟随者的响应，并检查日志条目是否成功追加
-	
-		/// 适配器模式
-		// 适配器模式: 将一个类的接口转换成客户希望的另外一个接口。
-		// 适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。
 		// 适配上述结构体到 Json::Value 与 unordered_map 的转换
 		class RaftServiceAdapter
 		{
@@ -141,8 +124,8 @@ namespace Nano {
 				reply.expectTerm = value["expectTerm"].asInt();
 				return reply;
 			}
-		
-			static std::unordered_map<std::string, Json::ValueType> RequestVoteArgsMap() 
+
+			static std::unordered_map<std::string, Json::ValueType> RequestVoteArgsMap()
 			{
 				std::unordered_map<std::string, Json::ValueType> map;
 				map["term"] = Json::ValueType::intValue;
@@ -172,7 +155,7 @@ namespace Nano {
 				return map;
 			}
 
-			static std::unordered_map<std::string, Json::ValueType> AppendEntriesReplyMap() 
+			static std::unordered_map<std::string, Json::ValueType> AppendEntriesReplyMap()
 			{
 				std::unordered_map<std::string, Json::ValueType> map;
 				map["term"] = Json::ValueType::intValue;
@@ -182,5 +165,19 @@ namespace Nano {
 				return map;
 			}
 		};
+
+		typedef std::function<void(const RequestVoteReply&)> RequestVoteDoneCallback;		// 当一个节点向其他节点发送投票请求后，收到投票回复时，将调用此回调以处理投票结果
+		typedef std::function<void(const AppendEntriesReply&)> AppendEntriesDoneCallback;	// 当一个节点向其他节点发送日志追加请求后，收到回复时，将调用此回调以处理追加结果
+
+		typedef std::function<void(const RequestVoteArgs&,
+			const RequestVoteDoneCallback&)> DoRequestVoteCallback;							//当节点需要请求其他节点进行投票时，调用此函数。它发送投票请求，可能是异步的，投票结果会在 RequestVoteDoneCallback 回调中处理。
+		typedef std::function<void(const AppendEntriesArgs& args,
+			const AppendEntriesDoneCallback& done)> DoAppendEntriesCallback;				// 当一个节点需要向其他节点发送日志追加请求时，调用此函数。它发送日志追加请求，可能是异步的，追加结果会在 AppendEntriesDoneCallback 回调中处理。
+
+		typedef std::function<void(int, const RequestVoteArgs&,
+			const RequestVoteReply&)> RequestVoteReplyCallback;								// 选举请求回复 回调 (peerId, args, reply)	在 Raft 选举过程中，领导者候选人向其他节点发送投票请求后，当收到其他节点的投票回复时，这个回调会被调用，处理投票结果，并记录哪个节点发起的请求和相应的回复。
+
+		typedef std::function<void(int, const AppendEntriesArgs&,
+			const AppendEntriesReply&)> AppendEntriesReplyCallback;							// 日志追加请求回复 回调 (peerId, args, reply)	在 Raft 算法中，领导者节点向跟随者节点发送日志条目追加请求后，跟随者会返回一个 AppendEntriesReply，这个回调处理来自哪个跟随者的响应，并检查日志条目是否成功追加
 	}
 }

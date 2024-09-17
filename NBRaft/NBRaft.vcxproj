@@ -153,6 +153,7 @@
     <ClCompile Include="RaftNode.cpp" />
     <ClCompile Include="raftRpcClientStub.cpp" />
     <ClCompile Include="raftRpcServerStub.cpp" />
+    <ClCompile Include="raftservice.cpp" />
     <ClCompile Include="rpcclient.cpp" />
     <ClCompile Include="rpcclientstub.cpp" />
     <ClCompile Include="rpcserver.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="RaftNode.h" />
     <ClInclude Include="raftRpcClientStub.h" />
     <ClInclude Include="raftRpcServerStub.h" />
+    <ClInclude Include="raftservice.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="raftrepeattimer.h" />
     <ClInclude Include="rpcclient.h" />
