@@ -74,6 +74,14 @@ namespace Nano {
 			m_callRecords.clear();
 		}
 
+		void RpcClient::removeCallRecord(const std::string& id)
+		{
+			std::lock_guard<std::mutex> lock(m_mutex);
+			auto it = m_callRecords.find(id);
+			if (it != m_callRecords.end())
+				m_callRecords.erase(it);
+		}
+
 		void RpcClient::onDataReady(std::shared_ptr<Communication::Session> sender, std::shared_ptr<Communication::RecvPacket> packet)
 		{
 			std::string responseJsonStr = Nano::Communication::decode(packet->m_data, packet->m_size);

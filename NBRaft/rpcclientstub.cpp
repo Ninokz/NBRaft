@@ -129,11 +129,6 @@ namespace Nano {
 			}
 		}
 
-
-		CallRecord::Ptr RpcClientStub::getReturnCallRecord(const std::string& id) {
-			return m_rpcClient->getReturnCallRecord(id);
-		}
-
 		CallRecord::Ptr RpcClientStub::rpcReturnCallOnce(std::string ip, short port, std::string id, std::string methodName,
 			std::unordered_map<std::string, Json::Value> params,
 			const ProcedureDoneCallback callback, 

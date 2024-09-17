@@ -19,7 +19,6 @@ namespace Nano {
 			RpcClientStub();
 			virtual ~RpcClientStub();
 
-			CallRecord::Ptr getReturnCallRecord(const std::string& id);
 			bool connect(std::string ip, short port);
 			void disconnect();
 			CallRecord::Ptr rpcReturnCall(std::string id, std::string methodName, std::unordered_map<std::string, Json::Value> params, const ProcedureDoneCallback callback, int milliseconds_timeout);
@@ -31,7 +30,7 @@ namespace Nano {
 			static std::future<CallRecord::Ptr> asyncRpcReturnCallOnce(std::string ip, short port, std::string id, std::string methodName, std::unordered_map<std::string, Json::Value> params, const ProcedureDoneCallback callback, int milliseconds_timeout);
 			static bool rpcNotifyCallOnce(std::string ip, short port, std::string methodName, std::unordered_map<std::string, Json::Value> params);
 			static std::future<bool> asyncRpcNotifyCallOnce(std::string ip, short port, std::string methodName, std::unordered_map<std::string, Json::Value> params);
-		private:
+		protected:
 			RpcClient::Ptr m_rpcClient;
 			bool m_connected;
 		};

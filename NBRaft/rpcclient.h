@@ -58,6 +58,7 @@ namespace Nano {
 			bool callNotifyProcedure(JrpcProto::JsonRpcRequest::Ptr request);
 			CallRecord::Ptr getReturnCallRecord(const std::string& id);
 			void clearCallRecords();
+			void removeCallRecord(const std::string& id);
 		private:
 			void onDataReady(std::shared_ptr<Communication::Session> sender, std::shared_ptr<Communication::RecvPacket> packet) override;
 		private:

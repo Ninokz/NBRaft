@@ -19,12 +19,23 @@ namespace Nano {
             params["candidateId"] = candidateId;
             params["lastLogIndex"] = lastLogIndex;
             params["lastLogTerm"] = lastLogTerm;
+            std::string id = boost::uuids::to_string(boost::uuids::random_generator()());
 
-            auto wrappedCallback = [callback](Json::Value response) {
-                callback(response, false, false);  // Assuming no error or timeout for simplicity
+            auto wrappedCallback = [this,id,callback](Json::Value response) {
+				auto record = m_rpcClient->getReturnCallRecord(id);
+                if (record)
+                {
+                    if (record->isDone())
+                        callback(response, false, false);
+                    else
+                        callback(response, false, true);
+                }
+                else
+                {
+					callback(response, true, true);
+                }
             };
-
-            this->rpcReturnCall("requestVote", "requestVote", params, wrappedCallback, m_timeout);
+            this->rpcReturnCall(id, "requestVote", params, wrappedCallback, m_timeout);
         }
 
         std::future<Rpc::CallRecord::Ptr> RaftRpcClientStub::AsyncRequestVote(int term, int candidateId, int lastLogIndex, int lastLogTerm, const std::function<void(Json::Value, bool, bool)>& callback)
@@ -34,12 +45,23 @@ namespace Nano {
             params["candidateId"] = candidateId;
             params["lastLogIndex"] = lastLogIndex;
             params["lastLogTerm"] = lastLogTerm;
+            std::string id = boost::uuids::to_string(boost::uuids::random_generator()());
 
-            auto wrappedCallback = [callback](Json::Value response) {
-                callback(response, false, false);  // Assuming no error or timeout for simplicity
-                };
-
-            return this->asyncRpcReturnCall("requestVote", "requestVote", params, wrappedCallback, m_timeout);
+            auto wrappedCallback = [this, id, callback](Json::Value response) {
+				auto record = m_rpcClient->getReturnCallRecord(id);
+				if (record)
+				{
+					if (record->isDone())
+						callback(response, false, false);
+					else
+						callback(response, false, true);
+				}
+				else
+				{
+					callback(response, true, true);
+				}
+            };
+            return this->asyncRpcReturnCall(id, "requestVote", params, wrappedCallback, m_timeout);
         }
 
         void RaftRpcClientStub::AppendEntries(int term, int prevLogIndex, int prevLogTerm, const Json::Value& entries, int leaderCommit, const std::function<void(Json::Value, bool, bool)>& callback)
@@ -50,12 +72,23 @@ namespace Nano {
             params["prevLogTerm"] = prevLogTerm;
             params["entries"] = entries;
             params["leaderCommit"] = leaderCommit;
+            std::string id = boost::uuids::to_string(boost::uuids::random_generator()());
 
-            auto wrappedCallback = [callback](Json::Value response) {
-                callback(response, false, false);  // Assuming no error or timeout for simplicity
-                };
-
-            this->rpcReturnCall("appendEntries", "appendEntries", params, wrappedCallback, m_timeout);
+            auto wrappedCallback = [this, id, callback](Json::Value response) {
+				auto record = m_rpcClient->getReturnCallRecord(id);
+				if (record)
+				{
+					if (record->isDone())
+						callback(response, false, false);
+					else
+						callback(response, false, true);
+                }
+				else
+				{
+					callback(response, true, true);
+				}
+            };
+            this->rpcReturnCall(id, "appendEntries", params, wrappedCallback, m_timeout);
         }
 
         std::future<Rpc::CallRecord::Ptr> RaftRpcClientStub::AsyncAppendEntries(int term, int prevLogIndex, int prevLogTerm, const Json::Value& entries, int leaderCommit, const std::function<void(Json::Value, bool, bool)>& callback)
@@ -66,12 +99,22 @@ namespace Nano {
             params["prevLogTerm"] = prevLogTerm;
             params["entries"] = entries;
             params["leaderCommit"] = leaderCommit;
-
-            auto wrappedCallback = [callback](Json::Value response) {
-                callback(response, false, false);  // Assuming no error or timeout for simplicity
-                };
-
-            return this->asyncRpcReturnCall("appendEntries", "appendEntries", params, wrappedCallback, m_timeout);
+            std::string id = boost::uuids::to_string(boost::uuids::random_generator()());
+            auto wrappedCallback = [this, id, callback](Json::Value response) {
+				auto record = m_rpcClient->getReturnCallRecord(id);
+				if (record)
+				{
+					if (record->isDone())
+						callback(response, false, false);
+					else
+						callback(response, false, true);
+                }
+				else
+				{
+					callback(response, true, true);
+                }
+            };
+            return this->asyncRpcReturnCall(id, "appendEntries", params, wrappedCallback, m_timeout);
         }
     }
 }
