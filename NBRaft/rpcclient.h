@@ -32,6 +32,10 @@ namespace Nano {
 			CallRecord() = delete;
 			CallRecord(JrpcProto::JsonRpcRequest::Ptr request) : request(request), response(nullptr), timestamp(std::time(nullptr)) {}
 			~CallRecord() = default;
+
+			bool isDone() {
+				return response != nullptr;
+			}
 		public:
 			time_t timestamp;
 			JrpcProto::JsonRpcRequest::Ptr request;
@@ -53,9 +57,11 @@ namespace Nano {
 			bool callReturnProcedure(JrpcProto::JsonRpcRequest::Ptr request, const ProcedureDoneCallback callback);
 			bool callNotifyProcedure(JrpcProto::JsonRpcRequest::Ptr request);
 			CallRecord::Ptr getReturnCallRecord(const std::string& id);
+			void clearCallRecords();
 		private:
 			void onDataReady(std::shared_ptr<Communication::Session> sender, std::shared_ptr<Communication::RecvPacket> packet) override;
 		private:
+			std::mutex m_mutex;
 			CallRecordMap m_callRecords;
 		};
 

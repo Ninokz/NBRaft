@@ -18,6 +18,7 @@ namespace Nano {
 
 		bool RpcClient::callReturnProcedure(JrpcProto::JsonRpcRequest::Ptr request, const ProcedureDoneCallback callback)
 		{
+			std::lock_guard<std::mutex> lock(m_mutex);
 			if (m_callRecords.find(request->getId()) != m_callRecords.end())
 				return false;
 			// 1. record
@@ -60,10 +61,17 @@ namespace Nano {
 
 		CallRecord::Ptr RpcClient::getReturnCallRecord(const std::string& id)
 		{
+			std::lock_guard<std::mutex> lock(m_mutex);
 			auto it = m_callRecords.find(id);
 			if (it != m_callRecords.end())
 				return it->second.first;
 			return nullptr;
+		}
+
+		void RpcClient::clearCallRecords()
+		{
+			std::lock_guard<std::mutex> lock(m_mutex);
+			m_callRecords.clear();
 		}
 
 		void RpcClient::onDataReady(std::shared_ptr<Communication::Session> sender, std::shared_ptr<Communication::RecvPacket> packet)
@@ -73,6 +81,7 @@ namespace Nano {
 			Nano::JrpcProto::JsonRpcResponse::Ptr response = Nano::JrpcProto::JsonRpcResponseFactory::createResponseFromJsonStr(responseJsonStr, &generateResult);
 			if (generateResult)
 			{
+				std::lock_guard<std::mutex> lock(m_mutex);
 				auto it = m_callRecords.find(response->getId());
 				if (it != m_callRecords.end())
 				{

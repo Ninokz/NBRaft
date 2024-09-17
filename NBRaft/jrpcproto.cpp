@@ -4,7 +4,7 @@ namespace Nano {
 	namespace JrpcProto {
 		JsonRpcRequest::JsonRpcRequest(const Json::Value rpcRequest)
 		{
-			if (JsonRpcRequestFactory::fieldsExist(rpcRequest))
+			if(JsonRpcRequestFactory::fieldsExist(rpcRequest))
 				m_rpcRequest = rpcRequest;
 			else
 				m_rpcRequest = Json::Value();
