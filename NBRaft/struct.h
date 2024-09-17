@@ -9,7 +9,7 @@ namespace Nano {
 			Undefined,		// 未定义: 未知状态, 一般用于初始化
 			Follower,		// 跟随者: 只是被动处理请求，不会发送任何请求，负责响应来自 leader 和 candidate 的请求
 			Candidate,		// 候选人: 如果 follower 在选举时间结束后，依然没有接收到来自 leader 的请求，他会认为 leader 已经宕机了。
-							// 这时候当前的集群中需要有一个新的 leader，所以它会变成 candidate 并发起一次选举。如果在选举中，获得大多数选票则会成为 leader
+			// 这时候当前的集群中需要有一个新的 leader，所以它会变成 candidate 并发起一次选举。如果在选举中，获得大多数选票则会成为 leader
 			Leader			// 领导者: 负责处理客户端请求，如果客户端请求的是写操作，那么 leader 会将这个请求追加到自己的日志中，并向其他节点发送 AppendEntries RPC 请求
 							// 如果客户端请求的是读操作，那么 leader 会直接返回自己的状态
 		};
@@ -48,7 +48,7 @@ namespace Nano {
 			int term = -1;				// 当前的任期，以便领导人去更新自己
 			bool success = false;		// 如果跟随者包含了匹配上 prevLogIndex 和 prevLogTerm 的日志时为真
 			int expectIndex = -1;		// 跟随者期望的日志条目索引
-			int expectTerm = -1;		// 跟随者期望的日志条目任期	
+			int expectTerm = -1;		// 跟随者期望的日志条目任期
 		};
 
 		typedef std::function<void(const RequestVoteReply&)> RequestVoteDoneCallback;		// 当一个节点向其他节点发送投票请求后，收到投票回复时，将调用此回调以处理投票结果
@@ -59,10 +59,10 @@ namespace Nano {
 		typedef std::function<void(const AppendEntriesArgs& args,
 			const AppendEntriesDoneCallback& done)> DoAppendEntriesCallback;				// 当一个节点需要向其他节点发送日志追加请求时，调用此函数。它发送日志追加请求，可能是异步的，追加结果会在 AppendEntriesDoneCallback 回调中处理。
 
-		typedef std::function<void(int,const RequestVoteArgs&,
+		typedef std::function<void(int, const RequestVoteArgs&,
 			const RequestVoteReply&)> RequestVoteReplyCallback;								// 选举请求回复 回调 (peerId, args, reply)	在 Raft 选举过程中，领导者候选人向其他节点发送投票请求后，当收到其他节点的投票回复时，这个回调会被调用，处理投票结果，并记录哪个节点发起的请求和相应的回复。
 
-		typedef std::function<void(int,const AppendEntriesArgs&,
+		typedef std::function<void(int, const AppendEntriesArgs&,
 			const AppendEntriesReply&)> AppendEntriesReplyCallback;							// 日志追加请求回复 回调 (peerId, args, reply)	在 Raft 算法中，领导者节点向跟随者节点发送日志条目追加请求后，跟随者会返回一个 AppendEntriesReply，这个回调处理来自哪个跟随者的响应，并检查日志条目是否成功追加
 	}
 }

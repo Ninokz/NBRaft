@@ -17,7 +17,7 @@ namespace Nano {
 		public:
 			typedef std::shared_ptr<RpcClientStub> Ptr;
 			RpcClientStub();
-			~RpcClientStub();
+			virtual ~RpcClientStub();
 
 			CallRecord::Ptr getReturnCallRecord(const std::string& id);
 			bool connect(std::string ip, short port);

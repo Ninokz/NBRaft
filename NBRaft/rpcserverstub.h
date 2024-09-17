@@ -11,7 +11,7 @@ namespace Nano {
 			typedef std::shared_ptr<RpcServerStub> Ptr;
 		public:
 			RpcServerStub(short port);
-			~RpcServerStub();
+			virtual ~RpcServerStub();
 			void registReturn(std::string methodName, std::unordered_map<std::string, Json::ValueType> paramsNameTypesMap, ReturnFunc done);
 			void registNotify(std::string methodName, std::unordered_map<std::string, Json::ValueType> paramsNameTypesMap, NotifyFunc done);
 			void run();
