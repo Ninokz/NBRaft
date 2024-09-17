@@ -17,13 +17,11 @@ namespace Nano {
             RaftRpcClientStub(int timeout);
             virtual ~RaftRpcClientStub();
 
-            void RequestVote(int term, int candidateId, int lastLogIndex, int lastLogTerm,const std::function<void(Json::Value, bool, bool)>& callback);
+            void RequestVote(int term, int candidateId, int lastLogIndex, int lastLogTerm,const std::function<void(Json::Value response, bool err, bool timeout)>& callback);
+            std::future<Rpc::CallRecord::Ptr> AsyncRequestVote(int term, int candidateId, int lastLogIndex, int lastLogTerm, const std::function<void(Json::Value response, bool err, bool timeout)>& callback);
+            void AppendEntries(int term, int prevLogIndex, int prevLogTerm,const Json::Value& entries, int leaderCommit,const std::function<void(Json::Value response, bool err, bool timeout)>& callback);
 
-            std::future<Rpc::CallRecord::Ptr> AsyncRequestVote(int term, int candidateId, int lastLogIndex, int lastLogTerm, const std::function<void(Json::Value, bool, bool)>& callback);
-
-            void AppendEntries(int term, int prevLogIndex, int prevLogTerm,const Json::Value& entries, int leaderCommit,const std::function<void(Json::Value, bool, bool)>& callback);
-
-            std::future<Rpc::CallRecord::Ptr> AsyncAppendEntries(int term, int prevLogIndex, int prevLogTerm,const Json::Value& entries, int leaderCommit, const std::function<void(Json::Value, bool, bool)>& callback);
+            std::future<Rpc::CallRecord::Ptr> AsyncAppendEntries(int term, int prevLogIndex, int prevLogTerm,const Json::Value& entries, int leaderCommit, const std::function<void(Json::Value response, bool err, bool timeout)>& callback);
         private:
 			int m_timeout;
         };
