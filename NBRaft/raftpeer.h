@@ -4,7 +4,6 @@
 #include "nocopyable.h"
 #include "rpcclientstub.h"
 
-#include "raft.h"
 #include "struct.h"
 
 namespace Nano {
