@@ -226,7 +226,7 @@ namespace Nano {
 			{
 				return std::make_shared<JsonRpcError>(JsonRpcError::JsonRpcErrorCode(m_rpcResponse["error"]["code"].asInt()));
 			}
-			return nullptr;
+			return JsonRpcErrorFactory::createEmptyError();
 		}
 
 		bool JsonRpcResponse::isError() const
@@ -263,18 +263,23 @@ namespace Nano {
 			std::istringstream iss(jsonStr);
 			if (!Json::parseFromStream(readerBuilder, iss, &root, &errs)) {
 				*flag = false;
-				return nullptr;
+				return JsonRpcRequestFactory::createEmptyRequest();
 			}
 			else
 			{
 				if (!JsonRpcRequestFactory::fieldsExist(root))
 				{
 					*flag = false;
-					return nullptr;
+					return JsonRpcRequestFactory::createEmptyRequest();
 				}
 				*flag = true;
 				return std::make_shared<JsonRpcRequest>(root);
 			}
+		}
+
+		JsonRpcRequest::Ptr JsonRpcRequestFactory::createEmptyRequest()
+		{
+			return std::make_shared<JsonRpcRequest>(Json::Value());
 		}
 
 		inline bool JsonRpcRequestFactory::fieldsExist(const Json::Value& rpcRequestJson)
@@ -303,12 +308,12 @@ namespace Nano {
 			std::istringstream iss(jsonStr);
 			if (!Json::parseFromStream(readerBuilder, iss, &root, &errs)) {
 				*flag = false;
-				return nullptr;
+				return JsonRpcResponseFactory::createEmptyResponse();
 			}
 			if (!JsonRpcResponseFactory::fieldsExist(root))
 			{
 				*flag = false;
-				return nullptr;
+				return JsonRpcResponseFactory::createEmptyResponse();
 			}
 			else
 			{
@@ -322,13 +327,18 @@ namespace Nano {
 			if (!JsonRpcRequestFactory::fieldsExist(request))
 			{
 				*flag = false;
-				return nullptr;
+				return JsonRpcResponseFactory::createEmptyResponse();
 			}
 			else
 			{
 				*flag = true;
 				return std::make_shared<JsonRpcResponse>(request["jsonrpc"].asString(), request["id"].asString(), result);
 			}
+		}
+
+		JsonRpcResponse::Ptr JsonRpcResponseFactory::createEmptyResponse()
+		{
+			return std::make_shared<JsonRpcResponse>(Json::Value());
 		}
 
 		JsonRpcResponse::Ptr JsonRpcResponseFactory::createErrorResponse(const std::string& version, const JsonRpcError& error)
@@ -375,6 +385,11 @@ namespace Nano {
 				return std::make_shared<JsonRpcError>(JsonRpcError::JsonRpcErrorCode::InternalError);
 			else
 				return std::make_shared<JsonRpcError>(JsonRpcError::JsonRpcErrorCode::InternalError);
+		}
+
+		inline JsonRpcError::Ptr JsonRpcErrorFactory::createEmptyError()
+		{
+			return std::make_shared<JsonRpcError>(JsonRpcError::JsonRpcErrorCode::InternalError);
 		}
 	}
 }

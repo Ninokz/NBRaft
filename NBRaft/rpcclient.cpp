@@ -65,7 +65,7 @@ namespace Nano {
 			auto it = m_callRecords.find(id);
 			if (it != m_callRecords.end())
 				return it->second.first;
-			return nullptr;
+			return std::make_shared<CallRecord>();
 		}
 
 		void RpcClient::clearCallRecords()

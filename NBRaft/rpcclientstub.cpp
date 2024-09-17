@@ -49,17 +49,15 @@ namespace Nano {
 				if (this->m_rpcClient->callReturnProcedure(request, callback))
 				{
 					std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds_timeout));
-					return this->m_rpcClient->getReturnCallRecord(id);
-				}
-				else
-				{
-					return nullptr;
+					auto record =  this->m_rpcClient->getReturnCallRecord(id);
+					if (!record->isError() && record->isDone())
+					{
+						this->m_rpcClient->removeCallRecord(id);
+					}
+					return record;
 				}
 			}
-			else
-			{
-				return nullptr;
-			}
+			return std::make_shared<CallRecord>();
 		}
 
 		std::future<CallRecord::Ptr> RpcClientStub::asyncRpcReturnCall(std::string id, std::string methodName, std::unordered_map<std::string, Json::Value> params, const ProcedureDoneCallback callback, int milliseconds_timeout)
@@ -76,19 +74,23 @@ namespace Nano {
 					if (this->m_rpcClient->callReturnProcedure(request, callback))
 					{
 						std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds_timeout));
-						promise->set_value(this->m_rpcClient->getReturnCallRecord(id));
+						auto record = this->m_rpcClient->getReturnCallRecord(id);
+						if (!record->isError() && record->isDone())
+						{
+							this->m_rpcClient->removeCallRecord(id);
+						}
+						promise->set_value(record);
 					}
 					else
 					{
-						promise->set_value(nullptr);
+						promise->set_value(std::make_shared<CallRecord>());
 					}
 				});
 				return future;
 			}
 			else
 			{
-				// Set an empty result in the promise in case of connection failure
-				promise->set_value(nullptr);
+				promise->set_value(std::make_shared<CallRecord>());
 				return future;
 			}
 		}
@@ -129,7 +131,7 @@ namespace Nano {
 			}
 		}
 
-		CallRecord::Ptr RpcClientStub::rpcReturnCallOnce(std::string ip, short port, std::string id, std::string methodName,
+		CallRecord::Ptr RpcClientOnceStub::rpcReturnCallOnce(std::string ip, short port, std::string id, std::string methodName,
 			std::unordered_map<std::string, Json::Value> params,
 			const ProcedureDoneCallback callback, 
 			int milliseconds_timeout)
@@ -144,18 +146,11 @@ namespace Nano {
 					tmp_rpcClient->disconnect();
 					return tmp_rpcClient->getReturnCallRecord(id);
 				}
-				else
-				{
-					return nullptr;
-				}
 			}
-			else
-			{
-				return nullptr;
-			}
+			return std::make_shared<CallRecord>();
 		}
 
-		std::future<CallRecord::Ptr> RpcClientStub::asyncRpcReturnCallOnce(std::string ip, short port, std::string id, std::string methodName,
+		std::future<CallRecord::Ptr> RpcClientOnceStub::asyncRpcReturnCallOnce(std::string ip, short port, std::string id, std::string methodName,
 			std::unordered_map<std::string, Json::Value> params,
 			const ProcedureDoneCallback callback, 
 			int milliseconds_timeout)
@@ -180,7 +175,7 @@ namespace Nano {
 					else
 					{
 						// Set an empty result in the promise in case of connection failure
-						promise->set_value(nullptr);
+						promise->set_value(std::make_shared<CallRecord>());
 					}
 				});
 
@@ -189,12 +184,12 @@ namespace Nano {
 			else
 			{
 				// Set an empty result in the promise in case of connection failure
-				promise->set_value(nullptr);
+				promise->set_value(std::make_shared<CallRecord>());
 				return future;
 			}
 		}
 
-		bool RpcClientStub::rpcNotifyCallOnce(std::string ip, short port, std::string methodName, 
+		bool RpcClientOnceStub::rpcNotifyCallOnce(std::string ip, short port, std::string methodName,
 			std::unordered_map<std::string, Json::Value> params)
 		{
 			Nano::JrpcProto::JsonRpcRequest::Ptr request = JrpcProto::JsonRpcRequestFactory::createNotifyCallRequest("2.0", methodName, params);
@@ -211,7 +206,7 @@ namespace Nano {
 			}
 		}
 
-		std::future<bool> RpcClientStub::asyncRpcNotifyCallOnce(std::string ip, short port, std::string methodName, 
+		std::future<bool> RpcClientOnceStub::asyncRpcNotifyCallOnce(std::string ip, short port, std::string methodName,
 			std::unordered_map<std::string, Json::Value> params)
 		{
 			Nano::JrpcProto::JsonRpcRequest::Ptr request = JrpcProto::JsonRpcRequestFactory::createNotifyCallRequest("2.0", methodName, params);

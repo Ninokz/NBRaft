@@ -16,7 +16,7 @@ namespace Nano {
 			void registNotify(std::string methodName, std::unordered_map<std::string, Json::ValueType> paramsNameTypesMap, NotifyFunc done);
 			void run();
 			void stop();
-		private:
+		protected:
 			RpcServer::Ptr m_rpcServer;
 		};
 	}
