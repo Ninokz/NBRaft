@@ -149,8 +149,6 @@
     <ClCompile Include="mutex.cpp" />
     <ClCompile Include="packet.cpp" />
     <ClCompile Include="parrallenThreadPool.cpp" />
-    <ClCompile Include="raftclientstub.cpp" />
-    <ClCompile Include="raftrpcserverstub.cpp" />
     <ClCompile Include="raftService.cpp" />
     <ClCompile Include="rpcclient.cpp" />
     <ClCompile Include="rpcclientstub.cpp" />
@@ -180,8 +178,6 @@
     <ClInclude Include="nocopyable.h" />
     <ClInclude Include="packet.h" />
     <ClInclude Include="parrallenThreadPool.h" />
-    <ClInclude Include="raftclientstub.h" />
-    <ClInclude Include="raftrpcserverstub.h" />
     <ClInclude Include="raftService.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="raftrepeattimer.h" />

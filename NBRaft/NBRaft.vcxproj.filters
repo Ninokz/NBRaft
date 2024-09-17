@@ -123,12 +123,6 @@
     <ClCompile Include="raftService.cpp">
       <Filter>源文件\nbraft</Filter>
     </ClCompile>
-    <ClCompile Include="raftrpcserverstub.cpp">
-      <Filter>源文件\nbraft</Filter>
-    </ClCompile>
-    <ClCompile Include="raftclientstub.cpp">
-      <Filter>源文件\nbraft</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BehaviorTree.h">
@@ -228,12 +222,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="raftService.h">
-      <Filter>头文件\nbraft</Filter>
-    </ClInclude>
-    <ClInclude Include="raftrpcserverstub.h">
-      <Filter>头文件\nbraft</Filter>
-    </ClInclude>
-    <ClInclude Include="raftclientstub.h">
       <Filter>头文件\nbraft</Filter>
     </ClInclude>
   </ItemGroup>
