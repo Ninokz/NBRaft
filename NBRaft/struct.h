@@ -9,8 +9,8 @@ namespace Nano {
 			Undefined,		// 未定义: 未知状态, 一般用于初始化
 			Follower,		// 跟随者: 只是被动处理请求，不会发送任何请求，负责响应来自 leader 和 candidate 的请求
 			Candidate,		// 候选人: 如果 follower 在选举时间结束后，依然没有接收到来自 leader 的请求，他会认为 leader 已经宕机了。
-			// 这时候当前的集群中需要有一个新的 leader，所以它会变成 candidate 并发起一次选举。如果在选举中，获得大多数选票则会成为 leader
-			Leader			// 领导者: 负责处理客户端请求，如果客户端请求的是写操作，那么 leader 会将这个请求追加到自己的日志中，并向其他节点发送 AppendEntries RPC 请求
+							// 这时候当前的集群中需要有一个新的 leader，所以它会变成 candidate 并发起一次选举。如果在选举中，获得大多数选票则会成为 leader
+			Leader			// 领导者: 负责处理客户端请求，如果客户端请求的是写操作，那么 leader 会将这个请求追加到自己的日志中，并向其他节点发送 appendEntries RPC 请求
 							// 如果客户端请求的是读操作，那么 leader 会直接返回自己的状态
 		};
 
@@ -64,5 +64,84 @@ namespace Nano {
 
 		typedef std::function<void(int, const AppendEntriesArgs&,
 			const AppendEntriesReply&)> AppendEntriesReplyCallback;							// 日志追加请求回复 回调 (peerId, args, reply)	在 Raft 算法中，领导者节点向跟随者节点发送日志条目追加请求后，跟随者会返回一个 AppendEntriesReply，这个回调处理来自哪个跟随者的响应，并检查日志条目是否成功追加
+	
+		/// 适配器模式
+		// 适配器模式: 将一个类的接口转换成客户希望的另外一个接口。
+		// 适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。
+		// 适配上述结构体到Json::Value
+		class RaftServiceAdapter
+		{
+		public:
+			static Json::Value RequestVoteArgsToJson(const RequestVoteArgs& args) {
+				Json::Value value;
+				value["term"] = args.term;
+				value["candidateId"] = args.candidateId;
+				value["lastLogIndex"] = args.lastLogIndex;
+				value["lastLogTerm"] = args.lastLogTerm;
+				return value;
+			}
+			static RequestVoteArgs RequestVoteArgsFromJson(const Json::Value& value) {
+				RequestVoteArgs args;
+				args.term = value["term"].asInt();
+				args.candidateId = value["candidateId"].asInt();
+				args.lastLogIndex = value["lastLogIndex"].asInt();
+				args.lastLogTerm = value["lastLogTerm"].asInt();
+				return args;
+			}
+
+			static Json::Value RequestVoteReplyToJson(const RequestVoteReply& reply) {
+				Json::Value value;
+				value["term"] = reply.term;
+				value["voteGranted"] = reply.voteGranted;
+				return value;
+			}
+
+			static RequestVoteReply RequestVoteReplyFromJson(const Json::Value& value) {
+				RequestVoteReply reply;
+				reply.term = value["term"].asInt();
+				reply.voteGranted = value["voteGranted"].asBool();
+				return reply;
+			}
+
+			static Json::Value AppendEntriesArgsToJson(const AppendEntriesArgs& args) {
+				Json::Value value;
+				value["term"] = args.term;
+				value["leaderId"] = args.leaderId;
+				value["prevLogIndex"] = args.prevLogIndex;
+				value["prevLogTerm"] = args.prevLogTerm;
+				value["entries"] = args.entries;
+				value["leaderCommit"] = args.leaderCommit;
+				return value;
+			}
+
+			static AppendEntriesArgs AppendEntriesArgsFromJson(const Json::Value& value) {
+				AppendEntriesArgs args;
+				args.term = value["term"].asInt();
+				args.leaderId = value["leaderId"].asInt();
+				args.prevLogIndex = value["prevLogIndex"].asInt();
+				args.prevLogTerm = value["prevLogTerm"].asInt();
+				args.entries = value["entries"];
+				args.leaderCommit = value["leaderCommit"].asInt();
+				return args;
+			}
+
+			static Json::Value AppendEntriesReplyToJson(const AppendEntriesReply& reply) {
+				Json::Value value;
+				value["term"] = reply.term;
+				value["success"] = reply.success;
+				value["expectIndex"] = reply.expectIndex;
+				value["expectTerm"] = reply.expectTerm;
+				return value;
+			}
+
+			static AppendEntriesReply AppendEntriesReplyFromJson(const Json::Value& value) {
+				AppendEntriesReply reply;
+				reply.term = value["term"].asInt();
+				reply.success = value["success"].asBool();
+				reply.expectIndex = value["expectIndex"].asInt();
+				reply.expectTerm = value["expectTerm"].asInt();
+				return reply;
+			}
+		};
 	}
 }
