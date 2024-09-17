@@ -1,5 +1,7 @@
 #pragma once
+#include <unordered_map>
 #include <functional>
+
 #include <json/json.h>
 
 namespace Nano {
@@ -68,7 +70,7 @@ namespace Nano {
 		/// 适配器模式
 		// 适配器模式: 将一个类的接口转换成客户希望的另外一个接口。
 		// 适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。
-		// 适配上述结构体到Json::Value
+		// 适配上述结构体到 Json::Value 与 unordered_map 的转换
 		class RaftServiceAdapter
 		{
 		public:
@@ -95,7 +97,6 @@ namespace Nano {
 				value["voteGranted"] = reply.voteGranted;
 				return value;
 			}
-
 			static RequestVoteReply RequestVoteReplyFromJson(const Json::Value& value) {
 				RequestVoteReply reply;
 				reply.term = value["term"].asInt();
@@ -113,7 +114,6 @@ namespace Nano {
 				value["leaderCommit"] = args.leaderCommit;
 				return value;
 			}
-
 			static AppendEntriesArgs AppendEntriesArgsFromJson(const Json::Value& value) {
 				AppendEntriesArgs args;
 				args.term = value["term"].asInt();
@@ -133,7 +133,6 @@ namespace Nano {
 				value["expectTerm"] = reply.expectTerm;
 				return value;
 			}
-
 			static AppendEntriesReply AppendEntriesReplyFromJson(const Json::Value& value) {
 				AppendEntriesReply reply;
 				reply.term = value["term"].asInt();
@@ -141,6 +140,46 @@ namespace Nano {
 				reply.expectIndex = value["expectIndex"].asInt();
 				reply.expectTerm = value["expectTerm"].asInt();
 				return reply;
+			}
+		
+			static std::unordered_map<std::string, Json::ValueType> RequestVoteArgsMap() 
+			{
+				std::unordered_map<std::string, Json::ValueType> map;
+				map["term"] = Json::ValueType::intValue;
+				map["candidateId"] = Json::ValueType::intValue;
+				map["lastLogIndex"] = Json::ValueType::intValue;
+				map["lastLogTerm"] = Json::ValueType::intValue;
+				return map;
+			}
+
+			static std::unordered_map<std::string, Json::ValueType> RequestVoteReplyMap()
+			{
+				std::unordered_map<std::string, Json::ValueType> map;
+				map["term"] = Json::ValueType::intValue;
+				map["voteGranted"] = Json::ValueType::booleanValue;
+				return map;
+			}
+
+			static std::unordered_map<std::string, Json::ValueType> AppendEntriesArgsMap()
+			{
+				std::unordered_map<std::string, Json::ValueType> map;
+				map["term"] = Json::ValueType::intValue;
+				map["leaderId"] = Json::ValueType::intValue;
+				map["prevLogIndex"] = Json::ValueType::intValue;
+				map["prevLogTerm"] = Json::ValueType::intValue;
+				map["entries"] = Json::ValueType::arrayValue;
+				map["leaderCommit"] = Json::ValueType::intValue;
+				return map;
+			}
+
+			static std::unordered_map<std::string, Json::ValueType> AppendEntriesReplyMap() 
+			{
+				std::unordered_map<std::string, Json::ValueType> map;
+				map["term"] = Json::ValueType::intValue;
+				map["success"] = Json::ValueType::booleanValue;
+				map["expectIndex"] = Json::ValueType::intValue;
+				map["expectTerm"] = Json::ValueType::intValue;
+				return map;
 			}
 		};
 	}
