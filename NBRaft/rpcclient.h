@@ -38,7 +38,7 @@ namespace Nano {
 			}
 
 			bool isError() {
-				return request == nullptr;
+				return request == nullptr || response == nullptr;
 			}
 		public:
 			time_t timestamp;
