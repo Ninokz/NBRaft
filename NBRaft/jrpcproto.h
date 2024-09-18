@@ -63,6 +63,8 @@ namespace Nano {
 
 			static inline JsonRpcRequest::Ptr createEmptyRequest();
 
+			static inline JsonRpcRequest::Ptr createFromJson(const Json::Value& json, bool* flag);
+
 			template <typename... Args>
 			static JsonRpcRequest::Ptr createReturnCallRequest(const std::string& version, const std::string& method, const std::string id, const Args&... args) {
 				Json::Value params(Json::objectValue);
@@ -155,6 +157,7 @@ namespace Nano {
 			static JsonRpcResponse::Ptr createResponseFromJsonStr(const std::string& jsonStr, bool* flag);
 			static JsonRpcResponse::Ptr createErrorResponse(const std::string& version, const JsonRpcError& error);
 			static JsonRpcResponse::Ptr createResponseFromRequest(const Json::Value& request, const Json::Value result, bool* flag);
+			static inline JsonRpcResponse::Ptr createResponseFromJson(const Json::Value& rpcResponseJson, bool* flag);
 			static inline JsonRpcResponse::Ptr createEmptyResponse();
 			static inline bool fieldsExist(const Json::Value& rpcresponseJson);
 		};

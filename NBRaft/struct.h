@@ -57,6 +57,10 @@ namespace Nano {
 		class RaftServiceAdapter
 		{
 		public:
+			static bool RequestVoteFieldsCheck(const Json::Value& value) {
+				return value.isMember("term") && value.isMember("candidateId") &&
+					value.isMember("lastLogIndex") && value.isMember("lastLogTerm");
+			}
 			static Json::Value RequestVoteArgsToJson(const RequestVoteArgs& args) {
 				Json::Value value;
 				value["term"] = args.term;
@@ -74,6 +78,9 @@ namespace Nano {
 				return args;
 			}
 
+			static bool RequestVoteReplyFieldsCheck(const Json::Value& value) {
+				return value.isMember("term") && value.isMember("voteGranted");
+			}
 			static Json::Value RequestVoteReplyToJson(const RequestVoteReply& reply) {
 				Json::Value value;
 				value["term"] = reply.term;
@@ -87,6 +94,11 @@ namespace Nano {
 				return reply;
 			}
 
+			static bool AppendEntriesFieldsCheck(const Json::Value& value) {
+				return value.isMember("term") && value.isMember("leaderId") &&
+					value.isMember("prevLogIndex") && value.isMember("prevLogTerm") &&
+					value.isMember("entries") && value.isMember("leaderCommit");
+			}
 			static Json::Value AppendEntriesArgsToJson(const AppendEntriesArgs& args) {
 				Json::Value value;
 				value["term"] = args.term;
@@ -108,6 +120,10 @@ namespace Nano {
 				return args;
 			}
 
+			static bool AppendEntriesReplyFieldsCheck(const Json::Value& value) {
+				return value.isMember("term") && value.isMember("success") &&
+					value.isMember("expectIndex") && value.isMember("expectTerm");
+			}
 			static Json::Value AppendEntriesReplyToJson(const AppendEntriesReply& reply) {
 				Json::Value value;
 				value["term"] = reply.term;

@@ -282,6 +282,20 @@ namespace Nano {
 			return std::make_shared<JsonRpcRequest>(Json::Value());
 		}
 
+		JsonRpcRequest::Ptr JsonRpcRequestFactory::createFromJson(const Json::Value& json, bool* flag)
+		{
+			if (!JsonRpcRequestFactory::fieldsExist(json))
+			{
+				*flag = false;
+				return JsonRpcRequestFactory::createEmptyRequest();
+			}
+			else
+			{
+				*flag = true;
+				return std::make_shared<JsonRpcRequest>(json);
+			}
+		}
+
 		inline bool JsonRpcRequestFactory::fieldsExist(const Json::Value& rpcRequestJson)
 		{
 			if (!rpcRequestJson.isMember("jsonrpc") || !rpcRequestJson["jsonrpc"].isString()) {
@@ -333,6 +347,20 @@ namespace Nano {
 			{
 				*flag = true;
 				return std::make_shared<JsonRpcResponse>(request["jsonrpc"].asString(), request["id"].asString(), result);
+			}
+		}
+
+		JsonRpcResponse::Ptr JsonRpcResponseFactory::createResponseFromJson(const Json::Value& rpcResponseJson, bool* flag)
+		{
+			if (!JsonRpcResponseFactory::fieldsExist(rpcResponseJson))
+			{
+				*flag = false;
+				return JsonRpcResponseFactory::createEmptyResponse();
+			}
+			else
+			{
+				*flag = true;
+				return std::make_shared<JsonRpcResponse>(rpcResponseJson);
 			}
 		}
 
