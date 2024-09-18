@@ -57,6 +57,7 @@ namespace Nano {
 				std::string method = request->getMethod();
 				Json::Value reqJson = request->toJson();
 				this->m_rpcService->callProcedureReturn(method, reqJson,
+					/// Raf::ProcedureDoneCallback µ˜”√Œª÷√
 					[this, sender](Json::Value response) {
 						try {
 							std::string responseStr = response.toStyledString();
