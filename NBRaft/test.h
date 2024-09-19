@@ -10,12 +10,6 @@
 /// hello world test case once
 
 
-bool checkHelloWorldReturnServiceParams(const Json::Value& params,
-	std::unordered_map<std::string, Json::ValueType>& paramsNameTypesMap) {
-
-}
-
-
 void helloworldReturnService(Json::Value& request, const Nano::Rpc::ProcedureDoneCallback& done) {
 	Json::Value result = "Hello, " + request["params"]["name"].asString() + "!";
 
