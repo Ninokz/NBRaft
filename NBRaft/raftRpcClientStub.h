@@ -2,7 +2,6 @@
 
 #include "rpcclientstub.h"
 
-
 namespace Nano {
 	namespace Raft {
 		class RaftCallRecord : public Rpc::CallRecord

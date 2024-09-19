@@ -82,7 +82,7 @@ namespace Nano {
 			}
 
 			static inline bool fieldsExist(const Json::Value& rpcRequestJson);
-		private:		
+		private:
 			static void addParams(Json::Value& params) {}
 			template <typename Key, typename Value, typename... Args>
 			static void addParams(Json::Value& params, const Key& key, const Value& value, const Args&... args) {

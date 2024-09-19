@@ -9,9 +9,7 @@ namespace Nano {
 			typedef std::shared_ptr<RaftRpcServerStub> Ptr;
 		public:
 
-
 		private:
-
 		};
 	}
 }

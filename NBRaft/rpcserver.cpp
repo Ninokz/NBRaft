@@ -4,7 +4,6 @@ namespace Nano {
 	namespace Rpc {
 		RpcServer::RpcServer(short port) : Communication::BaseServer(port), m_rpcService(std::make_unique<RpcService>())
 		{
-
 		}
 
 		RpcServer::~RpcServer()
@@ -57,7 +56,6 @@ namespace Nano {
 				std::string method = request->getMethod();
 				Json::Value reqJson = request->toJson();
 				this->m_rpcService->callProcedureReturn(method, reqJson,
-					/// Raf::ProcedureDoneCallback µ˜”√Œª÷√
 					[this, sender](Json::Value response) {
 						try {
 							std::string responseStr = response.toStyledString();

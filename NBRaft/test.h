@@ -9,10 +9,9 @@
 
 /// hello world test case once
 
-
 void helloworldReturnService(Json::Value& request, const Nano::Rpc::ProcedureDoneCallback& done) {
 	Json::Value result = "Hello, " + request["params"]["name"].asString() + "!";
-
+	std::cout << "helloworldReturnService: " << result << std::endl;
 	bool flag = false;
 	Nano::JrpcProto::JsonRpcResponse::Ptr response = Nano::JrpcProto::JsonRpcResponseFactory::createResponseFromRequest(request, result, &flag);
 	done(response->toJson());
@@ -92,7 +91,6 @@ void ClientStubhelloNotifyTest() {
 
 void helloNotifyService(Json::Value& request)
 {
-
 }
 
 void RpcServerStubhelloNotifyTest() {
@@ -105,4 +103,3 @@ void RpcServerStubhelloNotifyTest() {
 	system("pause");
 	rpcServerStub->stop();
 }
-

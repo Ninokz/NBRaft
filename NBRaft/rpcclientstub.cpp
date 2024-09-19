@@ -49,7 +49,7 @@ namespace Nano {
 				if (this->m_rpcClient->callReturnProcedure(request, callback))
 				{
 					std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds_timeout));
-					auto record =  this->m_rpcClient->getReturnCallRecord(id);
+					auto record = this->m_rpcClient->getReturnCallRecord(id);
 					if (!record->isError() && record->isDone())
 					{
 						this->m_rpcClient->removeCallRecord(id);
@@ -85,7 +85,7 @@ namespace Nano {
 					{
 						promise->set_value(std::make_shared<CallRecord>());
 					}
-				});
+					});
 				return future;
 			}
 			else
@@ -120,7 +120,7 @@ namespace Nano {
 				// Submit the async task to the thread pool
 				Nano::Concurrency::SimpleThreadPool::GetInstance()->submit([this, request, promise]() {
 					promise->set_value(this->m_rpcClient->callNotifyProcedure(request));
-				});
+					});
 				return future;
 			}
 			else
@@ -133,7 +133,7 @@ namespace Nano {
 
 		CallRecord::Ptr RpcClientOnceStub::rpcReturnCallOnce(std::string ip, short port, std::string id, std::string methodName,
 			std::unordered_map<std::string, Json::Value> params,
-			const ProcedureDoneCallback callback, 
+			const ProcedureDoneCallback callback,
 			int milliseconds_timeout)
 		{
 			Nano::JrpcProto::JsonRpcRequest::Ptr request = JrpcProto::JsonRpcRequestFactory::createReturnCallRequest("2.0", methodName, id, params);
@@ -152,7 +152,7 @@ namespace Nano {
 
 		std::future<CallRecord::Ptr> RpcClientOnceStub::asyncRpcReturnCallOnce(std::string ip, short port, std::string id, std::string methodName,
 			std::unordered_map<std::string, Json::Value> params,
-			const ProcedureDoneCallback callback, 
+			const ProcedureDoneCallback callback,
 			int milliseconds_timeout)
 		{
 			Nano::JrpcProto::JsonRpcRequest::Ptr request = JrpcProto::JsonRpcRequestFactory::createReturnCallRequest("2.0", methodName, id, params);
@@ -177,7 +177,7 @@ namespace Nano {
 						// Set an empty result in the promise in case of connection failure
 						promise->set_value(std::make_shared<CallRecord>());
 					}
-				});
+					});
 
 				return future;
 			}
@@ -222,7 +222,7 @@ namespace Nano {
 					bool res = tmp_rpcClient->callNotifyProcedure(request);
 					tmp_rpcClient->disconnect();
 					promise->set_value(res);
-				});
+					});
 				return future;
 			}
 			else
