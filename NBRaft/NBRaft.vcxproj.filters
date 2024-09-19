@@ -135,6 +135,9 @@
     <ClCompile Include="raftservice.cpp">
       <Filter>源文件\nbraft</Filter>
     </ClCompile>
+    <ClCompile Include="raftfactory.cpp">
+      <Filter>源文件\nbraft</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BehaviorTree.h">
@@ -246,6 +249,9 @@
       <Filter>头文件\nbraft</Filter>
     </ClInclude>
     <ClInclude Include="raftservice.h">
+      <Filter>头文件\nbraft</Filter>
+    </ClInclude>
+    <ClInclude Include="raftfactory.h">
       <Filter>头文件\nbraft</Filter>
     </ClInclude>
   </ItemGroup>

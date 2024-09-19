@@ -150,6 +150,7 @@
     <ClCompile Include="packet.cpp" />
     <ClCompile Include="parrallenThreadPool.cpp" />
     <ClCompile Include="raft.cpp" />
+    <ClCompile Include="raftfactory.cpp" />
     <ClCompile Include="RaftNode.cpp" />
     <ClCompile Include="raftRpcClientStub.cpp" />
     <ClCompile Include="raftRpcServerStub.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="packet.h" />
     <ClInclude Include="parrallenThreadPool.h" />
     <ClInclude Include="raft.h" />
+    <ClInclude Include="raftfactory.h" />
     <ClInclude Include="RaftNode.h" />
     <ClInclude Include="raftRpcClientStub.h" />
     <ClInclude Include="raftRpcServerStub.h" />
